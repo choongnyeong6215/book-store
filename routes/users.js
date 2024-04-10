@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
+const {
+  join,
+  login,
+  pwdResetRequest,
+  pwdReset,
+} = require("../controllers/usersController");
 
-router.post("/join", (req, res) => res.json("회원가입"));
+router.post("/join", join);
 
-router.post("/login", (req, res) => res.json("로그인"));
+router.post("/login", login);
 
-router.post((req, res) => res.json("비밀번호 초기화 요청"));
-
-router.put((req, res) => res.json("비밀번호 초기화"));
+router.route("/reset").post(pwdResetRequest).put(pwdReset);
 
 module.exports = router;
