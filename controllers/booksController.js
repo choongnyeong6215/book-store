@@ -1,42 +1,55 @@
 const conn = require("../mariadb");
 const { StatusCodes } = require("http-status-codes");
 
+// 카테고리, 신간 여부 존재에 따라 도서 목록 조회
 const allBooks = (req, res) => {
-  const { category_id } = req.query;
+  const { category_id, recent_books, limit, currentPage } = req.query;
 
-  if (category_id) {
-    const booksByCategoryQuery = "SELECT * FROM books WHERE category_id = ?";
+  /*
+   * limit : page별 도서 수               ex) 3
+   * currentPage : 현재 위치한 페이지       ex) 1, 2, 3 ...
+   * offset: limit * (currentPage - 1)  ex) 1페이지 : (3 * (1 - 1)) = 0, 2페이지 : (3 * (2 - 1)) = 3, 3페이지 : (3 * (3 - 1)) = 6 ...
+   */
 
-    conn.query(booksByCategoryQuery, category_id, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(StatusCodes.BAD_REQUEST).end();
-      }
+  let offset = limit * (currentPage - 1);
 
-      if (results.length) {
-        res.status(StatusCodes.OK).json(results);
-      } else {
-        res.status(StatusCodes.NOT_FOUND).end();
-      }
-    });
-  } else {
-    const allBooksQuery = "SELECT * FROM books";
+  let query = "SELECT * FROM books";
+  let values = [];
 
-    conn.query(allBooksQuery, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(StatusCodes.BAD_REQUEST).end();
-      }
-
-      res.status(StatusCodes.OK).json(results);
-    });
+  if (category_id && recent_books) {
+    query += ` WHERE category_id = ? AND pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()`;
+    values = [category_id];
+  } else if (category_id) {
+    query += ` WHERE category_id = ?`;
+    values = [category_id];
+  } else if (recent_books) {
+    query += ` WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()`;
   }
+
+  query += ` LIMIT ? OFFSET ?`;
+
+  values = [...values, Number(limit), offset];
+
+  conn.query(query, values, (err, results) => {
+    if (err) {
+      console.log(err);
+
+      return res.status(StatusCodes.BAD_REQUEST).end();
+    }
+
+    if (results.length) {
+      return res.status(StatusCodes.OK).json(results);
+    } else {
+      return res.status(StatusCodes.NOT_FOUND).end();
+    }
+  });
 };
 
 const bookDetail = (req, res) => {
   const { id } = req.params;
 
-  const bookDeatailQuery = "SELECT * FROM books WHERE id = ?";
+  const bookDeatailQuery =
+    "SELECT * FROM books LEFT JOIN categories ON books.id = categories.id WHERE books.id = ?";
 
   conn.query(bookDeatailQuery, id, (err, results) => {
     if (err) {
