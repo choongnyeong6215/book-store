@@ -1,4 +1,6 @@
 -- 더미 데이터
+
+-- books
 INSERT INTO books (title, form, isbn, summary, detail, author, pages, contents, price, pub_date)
 VALUES ("어린왕자들", "종이책", 0, "어리다..", "많이 어리다..", "김어림", 100, "목차입니다.", 20000, "2019-01-01");
 
@@ -32,7 +34,20 @@ VALUES ("효녀 심청", 12, 0, "종이책", 9, "심청아..", "공양미 삼백
 INSERT INTO books (title, img, category_id, form, isbn, summary, detail, author, pages, contents, price, pub_date)
 VALUES ("혹부리 영감", 22, 2, "ebook", 10, "노래 주머니..", "혹 두개 되버림..", "김영감", 100, "목차입니다.", 20000, "2024-04-11");
 
+-- likes
+INSERT INTO likes (user_id, liked_book_id) VALUES (5, 1);
+INSERT INTO likes (user_id, liked_book_id) VALUES (5, 2);
+INSERT INTO likes (user_id, liked_book_id) VALUES (5, 3);
+INSERT INTO likes (user_id, liked_book_id) VALUES (5, 4);
+INSERT INTO likes (user_id, liked_book_id) VALUES (6, 1);
+INSERT INTO likes (user_id, liked_book_id) VALUES (7, 1);
+INSERT INTO likes (user_id, liked_book_id) VALUES (6, 2);
+INSERT INTO likes (user_id, liked_book_id) VALUES (6, 3);
+INSERT INTO likes (user_id, liked_book_id) VALUES (6, 5);
+DELETE FROM likes WHERE user_id = 5 AND liked_book_id = 2;
 
+
+-- join
 SELECT * FROM books
 LEFT JOIN categories
 ON books.category_id = categories.id
