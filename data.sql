@@ -47,6 +47,12 @@ INSERT INTO likes (user_id, liked_book_id) VALUES (6, 5);
 DELETE FROM likes WHERE user_id = 5 AND liked_book_id = 2;
 
 
+-- cartItems
+INSERT INTO cartItems (book_id, quantity, user_id) VALUES (1, 1, 2);
+SELECT c.id, b.id, b.title, b.summary, b.quantity, b.price FROM cartItmes c LEFT JOIN books b ON c.book_id = b.id;
+DELETE FROM cartItems WHERE id = ?;
+SELECT * FROM cartItems WHERE id IN (1, 2);
+
 -- join
 SELECT * FROM books
 LEFT JOIN categories
