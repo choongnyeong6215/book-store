@@ -23,7 +23,7 @@ const getCartItems = (req, res) => {
   const { userId, selected } = req.body;
 
   const getCartItemsQuery = `
-    SELECT c.id, b.id, b.title, b.summary, b.quantity, b.price 
+    SELECT c.id, b.id, b.title, b.summary, c.quantity, b.price 
     FROM cartItems c
     LEFT JOIN books b
     ON c.book_id = b.id
