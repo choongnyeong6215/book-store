@@ -57,3 +57,26 @@ SELECT * FROM cartItems WHERE id IN (1, 2);
 SELECT * FROM books
 LEFT JOIN categories
 ON books.category_id = categories.id
+
+
+-- 20240417_이충녕
+
+-- deliveries
+-- 배송 정보 입력
+INSERT INTO deliveries (address, receiver, contact) VALUES ("인천시", "리충녕", "010-1111-1111");
+const delivery_id = SELECT MAX(Id) FROM deliveries
+
+-- 주문 정보 입력
+insert into orders (book_title, total_price, total_quantity, user_id, delivery_id) values ("어린 왕자들", 3, 60000, 2, delivery_id);
+const order_id = SELECT MAX(id) from orders;
+
+-- 주문 상세 목록 입력
+insert into orderedBook (order_id, book_id, quantity) values (order_id, 1, 1);
+insert into orderedBook (order_id, book_id, quantity) values (order_id, 3, 2);
+
+-- 최신 삽입 데이터 찾는 방식
+-- MAX()
+SELECT MAX(id) FROM Bookstore.orderedBook;
+
+-- LAST_INSERT_ID()
+SELECT LAST_INSERT_ID() FROM Bookstore.orderedBook;
