@@ -1,28 +1,39 @@
 const conn = require("../mariadb");
 const { StatusCodes } = require("http-status-codes");
+const ensureAuthorization = require("../middlewares/ensureAuthorization");
+const checkTokenError = require("../middlewares/checkToeknError");
 
 // 장바구니 담기
 const addToCart = (req, res) => {
-  const { bookId, quantity, userId } = req.body;
+  const { bookId, quantity } = req.body;
+  const auth = ensureAuthorization(req);
 
-  const addCartItemsQuery =
-    "INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)";
+  if (!checkTokenError(auth, res)) {
+    const addCartItemsQuery =
+      "INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)";
 
-  conn.query(addCartItemsQuery, [bookId, quantity, userId], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.status(StatusCodes.BAD_REQUEST).end();
-    }
+    conn.query(
+      addCartItemsQuery,
+      [bookId, quantity, auth.id],
+      (err, results) => {
+        if (err) {
+          console.log(err);
+          return res.status(StatusCodes.BAD_REQUEST).end();
+        }
 
-    return res.status(StatusCodes.OK).json(results);
-  });
+        return res.status(StatusCodes.OK).json(results);
+      }
+    );
+  }
 };
 
 // 장바구니 아이템 목록 / 장바구니에서 선택한 아이템 목록 조회
-const getCartItems = (req, res) => {
-  const { userId, selected } = req.body;
+const getCartItems = (req, res, next) => {
+  const { selected } = req.body;
+  const auth = ensureAuthorization(req);
 
-  const getCartItemsQuery = `
+  if (!checkTokenError(auth, res)) {
+    const getCartItemsQuery = `
     SELECT c.id, b.id, b.title, b.summary, c.quantity, b.price 
     FROM cartItems c
     LEFT JOIN books b
@@ -31,14 +42,15 @@ const getCartItems = (req, res) => {
     AND c.id IN (?)
     `;
 
-  conn.query(getCartItemsQuery, [userId, selected], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.status(StatusCodes.BAD_REQUEST).end();
-    }
+    conn.query(getCartItemsQuery, [auth.id, selected], (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(StatusCodes.BAD_REQUEST).end();
+      }
 
-    return res.status(StatusCodes.OK).json(results);
-  });
+      return res.status(StatusCodes.OK).json(results);
+    });
+  }
 };
 
 // 장바구니 아이템 삭제
