@@ -1,5 +1,7 @@
 const mysql = require("mysql2/promise");
 const { StatusCodes } = require("http-status-codes");
+const ensureAuthorization = require("../middlewares/ensureAuthorization");
+const checkTokenError = require("../middlewares/checkToeknError");
 
 const addOrder = async (req, res) => {
   // db connection
@@ -11,54 +13,58 @@ const addOrder = async (req, res) => {
     dateStrings: true,
   });
 
-  const { items, delivery, totalQuantity, totalPrice, userId, firstBookTitle } =
-    req.body;
+  const auth = ensureAuthorization(req);
 
-  try {
-    // deliveries
-    const newDeliveryQuery = `INSERT INTO deliveries (address, receiver, contact) VALUES (?, ?, ?)`;
+  if (!checkTokenError(auth, res)) {
+    const { items, delivery, totalQuantity, totalPrice, firstBookTitle } =
+      req.body;
 
-    const [deliveriseRes] = await conn.execute(newDeliveryQuery, [
-      delivery.address,
-      delivery.receiver,
-      delivery.contact,
-    ]);
+    try {
+      // deliveries
+      const newDeliveryQuery = `INSERT INTO deliveries (address, receiver, contact) VALUES (?, ?, ?)`;
 
-    const deliveryId = deliveriseRes.insertId;
+      const [deliveriseRes] = await conn.execute(newDeliveryQuery, [
+        delivery.address,
+        delivery.receiver,
+        delivery.contact,
+      ]);
 
-    // orders
-    const newOrdersquery = `INSERT INTO orders (book_title, total_price, total_quantity, user_id, delivery_id) VALUES (?, ?, ?, ?, ?)`;
+      const deliveryId = deliveriseRes.insertId;
 
-    const [ordersRes] = await conn.execute(newOrdersquery, [
-      firstBookTitle,
-      totalQuantity,
-      totalPrice,
-      userId,
-      deliveryId,
-    ]);
+      // orders
+      const newOrdersquery = `INSERT INTO orders (book_title, total_price, total_quantity, user_id, delivery_id) VALUES (?, ?, ?, ?, ?)`;
 
-    const orderId = ordersRes.insertId;
+      const [ordersRes] = await conn.execute(newOrdersquery, [
+        firstBookTitle,
+        totalQuantity,
+        totalPrice,
+        auth.id,
+        deliveryId,
+      ]);
 
-    // 주문할 상품 데이터 추출
-    const toOrderQuery = `SELECT book_id, quantity FROM cartItems WHERE id IN (?)`;
-    const [orderItems, fields] = await conn.query(toOrderQuery, [items]);
+      const orderId = ordersRes.insertId;
 
-    // orderedBook
-    const newOrderedBookQuery = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?`;
-    const values = [];
+      // 주문할 상품 데이터 추출
+      const toOrderQuery = `SELECT book_id, quantity FROM cartItems WHERE id IN (?)`;
+      const [orderItems, fields] = await conn.query(toOrderQuery, [items]);
 
-    orderItems.forEach((orderItem) => {
-      values.push([orderId, orderItem.book_id, orderItem.quantity]);
-    });
+      // orderedBook
+      const newOrderedBookQuery = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?`;
+      const values = [];
 
-    const orderedBookRes = await conn.query(newOrderedBookQuery, [values]);
+      orderItems.forEach((orderItem) => {
+        values.push([orderId, orderItem.book_id, orderItem.quantity]);
+      });
 
-    // 주문 상품 장바구니에서 삭제
-    const deleteCartItemsRes = await deleteCartItems(conn, items);
+      const orderedBookRes = await conn.query(newOrderedBookQuery, [values]);
 
-    return res.status(StatusCodes.OK).json(deleteCartItemsRes);
-  } catch (err) {
-    console.log(err);
+      // 주문 상품 장바구니에서 삭제
+      const deleteCartItemsRes = await deleteCartItems(conn, items);
+
+      return res.status(StatusCodes.OK).json(deleteCartItemsRes);
+    } catch (err) {
+      console.log(err);
+    }
   }
 };
 
@@ -82,18 +88,22 @@ const getOrders = async (req, res) => {
     dateStrings: true,
   });
 
-  try {
-    const orderByUsers = `
+  const auth = ensureAuthorization(req);
+
+  if (!checkTokenError(auth, res)) {
+    try {
+      const orderByUsers = `
       select o.id, o.created_at, d.address, d.receiver, d.contact, o.book_title, o.total_price, o.total_quantity
       from orders o
       left join deliveries d
       on o.delivery_id = d.id;`;
 
-    const [rows, fields] = await conn.query(orderByUsers);
+      const [rows, fields] = await conn.query(orderByUsers);
 
-    return res.status(StatusCodes.OK).json(rows);
-  } catch (err) {
-    console.log(err);
+      return res.status(StatusCodes.OK).json(rows);
+    } catch (err) {
+      console.log(err);
+    }
   }
 };
 
@@ -107,21 +117,25 @@ const getOrderDetail = async (req, res) => {
     dateStrings: true,
   });
 
-  try {
-    const { id } = req.params;
+  const auth = ensureAuthorization(req);
 
-    const getOrderDetailQuery = `
+  if (!checkTokenError(auth, res)) {
+    try {
+      const orderId = req.params.id;
+
+      const getOrderDetailQuery = `
       SELECT b.id, b.title, b.author, b.price, o.quantity
       FROM orderedBook o
       LEFT JOIN books b
       ON o.book_id = b.id
       WHERE o.id = ?`;
 
-    const [rows, fields] = await conn.query(getOrderDetailQuery, id);
+      const [rows, fields] = await conn.query(getOrderDetailQuery, orderId);
 
-    return res.status(StatusCodes.OK).json(rows);
-  } catch (err) {
-    console.log(err);
+      return res.status(StatusCodes.OK).json(rows);
+    } catch (err) {
+      console.log(err);
+    }
   }
 };
 

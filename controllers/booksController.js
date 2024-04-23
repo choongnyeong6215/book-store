@@ -1,5 +1,7 @@
 const conn = require("../mariadb");
 const { StatusCodes } = require("http-status-codes");
+const ensureAuthorization = require("../middlewares/ensureAuthorization");
+const jwt = require("jsonwebtoken");
 
 // 카테고리, 신간 여부 존재에 따라 도서 목록 조회
 const allBooks = (req, res) => {
@@ -47,26 +49,79 @@ const allBooks = (req, res) => {
 };
 
 const bookDetail = (req, res) => {
-  const { user_id } = req.body;
-  const book_id = req.params.id;
+  const auth = ensureAuthorization(req);
 
-  const bookDeatailQuery = `SELECT *,
-        (SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes, 
-        (SELECT EXISTS (SELECT * FROM likes WHERE user_id=? AND liked_book_id=?)) AS liked
-         FROM books LEFT OUTER JOIN categories ON books.category_id=categories.category_id WHERE books.id=?`;
+  // TokenExpiredError
+  if (auth instanceof jwt.TokenExpiredError) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: "로그인 세션이 만료되었습니다.",
+    });
+  }
+  // JsonWebTokenError
+  else if (auth instanceof jwt.JsonWebTokenError) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "유효하지 않은 토큰입니다.",
+    });
+  }
+  // 로그인 상태가 아니면 좋아요 여부 제외해 응답
+  else if (auth instanceof ReferenceError) {
+    const book_id = req.params.id;
 
-  conn.query(bookDeatailQuery, [user_id, book_id, book_id], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.status(StatusCodes.BAD_REQUEST).end();
-    }
+    const bookDeatailQuery = `
+      SELECT *,
+      (SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes
+      FROM books
+      LEFT OUTER JOIN categories
+      ON books.category_id=categories.category_id 
+      WHERE books.id=?
+    `;
 
-    if (results[0]) {
-      res.status(StatusCodes.OK).json(...results);
-    } else {
-      res.status(StatusCodes.NOT_FOUND).end();
-    }
-  });
+    const values = [book_id];
+
+    conn.query(bookDeatailQuery, values, (err, results) => {
+      if (err) {
+        console.log(err.name);
+        console.log(err.message);
+        return res.status(StatusCodes.BAD_REQUEST).end();
+      }
+
+      if (results[0]) {
+        return res.status(StatusCodes.OK).json(...results);
+      } else {
+        return res.status(StatusCodes.NOT_FOUND).end();
+      }
+    });
+  }
+  // 로그인 상태라면 좋아요 여부 포함해서 응답
+  else {
+    const book_id = req.params.id;
+
+    const bookDeatailQuery = `
+      SELECT *,
+      (SELECT count(*) FROM likes WHERE liked_book_id=books.id) AS likes,
+      (SELECT EXISTS (SELECT * FROM likes WHERE user_id=? AND liked_book_id=?)) AS liked
+      FROM books
+      LEFT OUTER JOIN categories
+      ON books.category_id=categories.category_id
+      WHERE books.id=?
+    `;
+
+    const values = [auth.id, book_id, book_id];
+
+    conn.query(bookDeatailQuery, values, (err, results) => {
+      if (err) {
+        console.log(err.name);
+        console.log(err.message);
+        return res.status(StatusCodes.BAD_REQUEST).end();
+      }
+
+      if (results[0]) {
+        return res.status(StatusCodes.OK).json(...results);
+      } else {
+        return res.status(StatusCodes.NOT_FOUND).end();
+      }
+    });
+  }
 };
 
 module.exports = {

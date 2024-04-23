@@ -66,16 +66,20 @@ const getCartItems = (req, res, next) => {
 const deleteCartItem = (req, res) => {
   const { cartItemId } = req.params;
 
-  const deleteCartItemsQuery = "DELETE FROM cartItems WHERE id = ?";
+  const auth = ensureAuthorization(req);
 
-  conn.query(deleteCartItemsQuery, cartItemId, (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.status(StatusCodes.BAD_REQUEST).end();
-    }
+  if (!checkTokenError(auth, res)) {
+    const deleteCartItemsQuery = "DELETE FROM cartItems WHERE id = ?";
 
-    return res.status(StatusCodes.OK).json(results);
-  });
+    conn.query(deleteCartItemsQuery, cartItemId, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(StatusCodes.BAD_REQUEST).end();
+      }
+
+      return res.status(StatusCodes.OK).json(results);
+    });
+  }
 };
 
 module.exports = {
