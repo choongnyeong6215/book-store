@@ -33,16 +33,25 @@ const getCartItems = (req, res, next) => {
   const auth = ensureAuthorization(req);
 
   if (!checkTokenError(auth, res)) {
-    const getCartItemsQuery = `
-    SELECT c.id, b.id, b.title, b.summary, c.quantity, b.price 
-    FROM cartItems c
-    LEFT JOIN books b
-    ON c.book_id = b.id
-    WHERE c.user_id = ?
-    AND c.id IN (?)
+    // 장바구니 보기
+    let getCartItemsQuery = `
+      SELECT c.id, b.id, b.title, b.summary, c.quantity, b.price
+      FROM cartItems c
+      LEFT JOIN books b
+      ON c.book_id = b.id
+      WHERE c.user_id = ?
     `;
 
-    conn.query(getCartItemsQuery, [auth.id, selected], (err, results) => {
+    let values = [auth.id];
+
+    // 주문서 작성 시 선택한 장바구니 목록 조회
+    if (selected) {
+      getCartItemsQuery += `AND c.id IN (?)`;
+
+      values = [auth.id, selected];
+    }
+
+    conn.query(getCartItemsQuery, values, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(StatusCodes.BAD_REQUEST).end();
