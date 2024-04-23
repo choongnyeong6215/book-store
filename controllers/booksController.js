@@ -7,6 +7,9 @@ const jwt = require("jsonwebtoken");
 const allBooks = (req, res) => {
   const { category_id, recent_books, limit, currentPage } = req.query;
 
+  // Response Body
+  const allBooksRes = {};
+
   /*
    * limit : page별 도서 수               ex) 3
    * currentPage : 현재 위치한 페이지       ex) 1, 2, 3 ...
@@ -15,8 +18,7 @@ const allBooks = (req, res) => {
 
   let offset = limit * (currentPage - 1);
 
-  let query =
-    "SELECT *, (SELECT COUNT(*) FROM likes WHERE liked_book_id = books.id) AS likes FROM books";
+  let query = `SELECT SQL_CALC_FOUND_ROWS *, (SELECT COUNT(*) FROM likes WHERE liked_book_id = books.id) AS likes FROM books`;
   let values = [];
 
   if (category_id && recent_books) {
@@ -24,7 +26,7 @@ const allBooks = (req, res) => {
     values = [category_id];
   } else if (category_id) {
     query += ` WHERE category_id = ?`;
-    values = [category_id];
+    values.push(category_id);
   } else if (recent_books) {
     query += ` WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()`;
   }
@@ -41,10 +43,31 @@ const allBooks = (req, res) => {
     }
 
     if (results.length) {
-      return res.status(StatusCodes.OK).json(results);
+      allBooksRes.books = results;
     } else {
       return res.status(StatusCodes.NOT_FOUND).end();
     }
+  });
+
+  // 총 도서 수
+  query = `SELECT found_rows()`;
+
+  conn.query(query, (err, results) => {
+    if (err) {
+      console.log(err);
+
+      return res.status(StatusCodes.BAD_REQUEST).end();
+    }
+
+    // 페이지 정보
+    const pagination = {
+      currentPage: Number(currentPage),
+      totalCount: results[0]["found_rows()"],
+    };
+
+    allBooksRes.pagination = pagination;
+
+    return res.status(StatusCodes.OK).json(allBooksRes);
   });
 };
 
