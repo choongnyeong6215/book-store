@@ -35,7 +35,7 @@ const getCartItems = (req, res, next) => {
   if (!checkTokenError(auth, res)) {
     // 장바구니 보기
     let getCartItemsQuery = `
-      SELECT c.id, b.id, b.title, b.summary, c.quantity, b.price
+      SELECT c.id, c.book_id AS bookId, b.title, b.summary, c.quantity, b.price
       FROM cartItems c
       LEFT JOIN books b
       ON c.book_id = b.id

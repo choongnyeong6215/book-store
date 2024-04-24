@@ -18,7 +18,11 @@ const allBooks = (req, res) => {
 
   let offset = limit * (currentPage - 1);
 
-  let query = `SELECT SQL_CALC_FOUND_ROWS *, (SELECT COUNT(*) FROM likes WHERE liked_book_id = books.id) AS likes FROM books`;
+  let query = `
+    SELECT SQL_CALC_FOUND_ROWS
+    id, title, img, summary, author, price, pub_date AS pubDate,
+    (SELECT COUNT(*) FROM likes WHERE liked_book_id = books.id) AS likes
+    FROM books`;
   let values = [];
 
   if (category_id && recent_books) {

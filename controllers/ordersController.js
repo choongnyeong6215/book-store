@@ -93,7 +93,7 @@ const getOrders = async (req, res) => {
   if (!checkTokenError(auth, res)) {
     try {
       const orderByUsers = `
-      select o.id, o.created_at, d.address, d.receiver, d.contact, o.book_title, o.total_price, o.total_quantity
+      select o.id, o.created_at as createdAt, d.address, d.receiver, d.contact, o.book_title, o.total_price, o.total_quantity
       from orders o
       left join deliveries d
       on o.delivery_id = d.id;`;
