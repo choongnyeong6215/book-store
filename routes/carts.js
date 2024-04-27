@@ -6,9 +6,7 @@ const {
   deleteCartItem,
 } = require("../controllers/cartsController");
 
-router.post("/", addToCart);
-
-router.get("/", getCartItems);
+router.route("/").post(addToCart).get(getCartItems);
 
 router.delete("/:cartItemId", deleteCartItem);
 
