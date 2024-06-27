@@ -2,10 +2,10 @@
   "name": "book-store-server",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.ts",
+  "main": "dist/app.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start": "nodemon dist/app.js",
     "dev": "nodemon src/app.ts"
   },
   "keywords": [],
