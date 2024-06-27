@@ -1,6 +1,6 @@
 ## ERD
 
-![alt text](image.png)
+![alt text](book_store_diagram.png)
 
 <br>
 
