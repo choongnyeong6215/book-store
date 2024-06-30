@@ -1,8 +1,8 @@
 export interface ICartItemRequestBody {
-  bookId: string;
-  quantity: string;
+  bookId: number;
+  quantity: number;
 }
 
 export interface ISelectedCartItem {
-  selectedCartItems?: string[];
+  selectedCartItems?: number[];
 }

@@ -73,7 +73,7 @@ export const getCartItems = async (
 };
 
 export const deleteCartItemByItemId = async (
-  req: Request<{ cartItemId: string }>,
+  req: Request<{cartItemId: string}>,
   res: Response
 ): Promise<Response<any, Record<string, any>>> => {
   const { cartItemId } = req.params;

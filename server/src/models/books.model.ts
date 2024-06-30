@@ -1,10 +1,10 @@
 import { RowDataPacket } from "mysql2";
 
 export interface IBookRequestQueryString {
-  categoryId?: string;
+  listNum?: number;
+  currentPage?: number;
+  categoryId?: number;
   isNewRelease?: string;
-  listNum?: string;
-  currentPage?: string;
 }
 
 export interface IBookResponse {

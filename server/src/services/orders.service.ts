@@ -9,8 +9,8 @@ export const insertOrder = async (
   cartItemIds: ISelectedCartItem[],
   delivery: IDelivery,
   representativeBookTitle: string,
-  totalQuantity: string,
-  totalPrice: string
+  totalQuantity: number,
+  totalPrice: number
 ) => {
   const conn = await pool.getConnection();
 

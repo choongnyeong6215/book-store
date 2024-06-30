@@ -4,10 +4,10 @@ import { IBookResponse, IsearchAllBooksResponse } from '../models/books.model';
 import { snakeToCamel } from '../utils/format';
 
 export const findAllBooks = async (
-  categoryId?: string,
+  listNum?: number,
+  currentPage?: number,
+  categoryId?: number,
   isNewRelease?: string,
-  listNum?: string,
-  currentPage?: string
 ): Promise<{
   books: IBookResponse[];
   totalBooksQunatity: number;
@@ -51,7 +51,7 @@ export const findAllBooks = async (
       (SELECT COUNT(*) FROM likes WHERE liked_book_id = books.id) AS likes
       FROM books
     `;
-    const values: string[] = [];
+    const values: (string | number)[] = [];
 
     // 카테고리별 신간
     if (categoryId && isNewRelease === 'true') {

@@ -19,7 +19,9 @@ export const getAllBooks = async (
   try {
     // isNewRelease true일 경우 신간으로 간주
     if (isNewRelease && isNewRelease !== "true") {
-      return res.status(StatusCodes.BAD_REQUEST).end();
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: "신간 여부 쿼리스트링은 오직 'true'만 사용합니다."
+      });
     }
 
     // currentPage는 항상 1 이상
@@ -30,10 +32,10 @@ export const getAllBooks = async (
     }
 
     const { books, totalBooksQunatity } = await findAllBooks(
-      categoryId,
-      isNewRelease,
       listNum,
-      currentPage
+      currentPage,
+      categoryId,
+      isNewRelease
     );
 
     if (!books.length) {

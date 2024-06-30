@@ -3,8 +3,8 @@ import { pool } from "../db/dbConnection";
 import { snakeToCamel } from "../utils/format";
 
 export const insertCartItem = async (
-  bookId: string,
-  quantity: string,
+  bookId: number,
+  quantity: number,
   userId: string
 ): Promise<ResultSetHeader> => {
   const conn = await pool.getConnection();
@@ -54,7 +54,7 @@ export const findCartItems = async (
 
 export const findSelectedCartItems = async (
   userId: string,
-  selectedCartItems: string[]
+  selectedCartItems: number[]
 ): Promise<RowDataPacket[]> => {
   const conn = await pool.getConnection();
 
@@ -82,7 +82,7 @@ export const findSelectedCartItems = async (
   }
 };
 
-export const deleteCartItem = async (cartItemId: string, userId: string) => {
+export const deleteCartItem = async (cartItemId: string, userId: string): Promise<RowDataPacket[]> => {
   const conn = await pool.getConnection();
 
   try {
@@ -92,7 +92,7 @@ export const deleteCartItem = async (cartItemId: string, userId: string) => {
         WHERE id = ?
         AND user_id = ?
     `;
-    const values = [cartItemId, userId];
+    const values = [String(cartItemId), userId];
 
     const [result] = await conn.execute<RowDataPacket[]>(sql, values);
 

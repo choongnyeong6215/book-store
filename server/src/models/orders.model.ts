@@ -10,6 +10,6 @@ export interface IOrderRequestBody {
   cartItemIds: ISelectedCartItem[];
   delivery: IDelivery;
   representativeBookTitle: string;
-  totalQuantity: string;
-  totalPrice: string;
+  totalQuantity: number;
+  totalPrice: number;
 }
