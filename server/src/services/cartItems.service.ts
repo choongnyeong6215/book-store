@@ -1,5 +1,6 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../db/dbConnection";
+import { snakeToCamel } from "../utils/format";
 
 export const insertCartItem = async (
   bookId: string,
@@ -41,7 +42,9 @@ export const findCartItems = async (
 
     const [result] = await conn.execute<RowDataPacket[]>(sql, values);
 
-    return result;
+    const camelCaseResult = snakeToCamel(result);
+
+    return camelCaseResult;
   } catch (err) {
     throw err;
   } finally {
@@ -69,7 +72,9 @@ export const findSelectedCartItems = async (
 
     const [result] = await conn.execute<RowDataPacket[]>(sql, values);
 
-    return result;
+    const camelCaseResult = snakeToCamel(result);
+
+    return camelCaseResult;
   } catch (err) {
     throw err;
   } finally {

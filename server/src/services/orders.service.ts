@@ -2,6 +2,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../db/dbConnection";
 import { IDelivery } from "../models/orders.model";
 import { ISelectedCartItem } from "../models/cartItems.model";
+import { snakeToCamel } from "../utils/format";
 
 export const insertOrder = async (
   userId: string,
@@ -112,9 +113,12 @@ export const findOrders = async (userId: string) => {
         WHERE o.user_id = ?
     `;
     const values = [userId];
+    
     const [result] = await conn.execute<RowDataPacket[]>(sql, values);
 
-    return result;
+    const camelCaseResult = snakeToCamel(result);
+
+    return camelCaseResult;
   } catch (err) {
     throw err;
   } finally {

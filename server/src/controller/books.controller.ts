@@ -42,22 +42,19 @@ export const getAllBooks = async (
       });
     }
 
-    const responseData: IBookResponseWithPagination = {
+    const result: IBookResponseWithPagination = {
       books,
       pagination: {
-        currentPage: Number(currentPage),
+        currentPage: currentPage ? Number(currentPage) : 1,
         totalBooksQunatity: Number(totalBooksQunatity),
       },
     };
 
-    // const camelCaseResponseData = camelcaseKeys(
-    //   responseData as Record<string, unknown>,
-    //   { deep: true }
-    // );
-
-    return responseData
-      ? res.status(StatusCodes.OK).json(responseData)
-      : res.status(StatusCodes.NOT_FOUND).end();
+    return result
+      ? res.status(StatusCodes.OK).json(result)
+      : res.status(StatusCodes.NOT_FOUND).json({
+        message: "도서를 찾을 수 없습니다.",
+      });
   } catch (err) {
     console.log(err);
     return res.status(StatusCodes.BAD_REQUEST).end();
@@ -80,13 +77,8 @@ export const getBook = async (
     // 로그인 안한 경우 (좋아요 여부 제외)
     else result = await findBookExceptLiked(bookId);
 
-    // const camelCaseResponseData = camelcaseKeys(
-    //   result as Record<string, unknown>[],
-    //   { deep: true }
-    // );
-
-    return result?.length
-      ? res.status(StatusCodes.OK).json(result[0])
+    return result
+      ? res.status(StatusCodes.OK).json(result)
       : res.status(StatusCodes.NOT_FOUND).json({
           message: "도서를 찾을 수 없습니다.",
         });

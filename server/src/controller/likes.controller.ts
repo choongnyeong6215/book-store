@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import { insertLike, deleteLike } from "../services/likes.service";
+import { NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { insertLike, deleteLike } from '../services/likes.service';
 
 export const createUserLikedBook = async (
   req: Request<{ bookId: string }>,
@@ -14,7 +14,7 @@ export const createUserLikedBook = async (
 
     if (!userId) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: "로그인이 필요합니다.",
+        message: '로그인이 필요합니다.',
       });
     }
 
@@ -38,7 +38,7 @@ export const deleteUserLikedBook = async (
 
     if (!userId) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: "로그인이 필요합니다.",
+        message: '로그인이 필요합니다.',
       });
     }
 

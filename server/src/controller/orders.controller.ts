@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import {
   insertOrder,
   findOrders,
   findOrderDetail,
-} from "../services/orders.service";
-import { IOrderRequestBody } from "../models/orders.model";
+} from '../services/orders.service';
+import { IOrderRequestBody } from '../models/orders.model';
 
 export const createOrder = async (
   req: Request<{}, {}, IOrderRequestBody>,
@@ -24,7 +24,7 @@ export const createOrder = async (
 
     if (!userId) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: "로그인이 필요합니다.",
+        message: '로그인이 필요합니다.',
       });
     }
 
@@ -50,7 +50,7 @@ export const getOrderDetail = async (req: Request, res: Response) => {
 
     if (!userId) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: "로그인이 필요합니다.",
+        message: '로그인이 필요합니다.',
       });
     }
 
@@ -59,7 +59,7 @@ export const getOrderDetail = async (req: Request, res: Response) => {
     return result.length
       ? res.status(StatusCodes.OK).json(result)
       : res.status(StatusCodes.NOT_FOUND).json({
-          message: "주문 내역이 없습니다.",
+          message: '주문 내역이 없습니다.',
         });
   } catch (err) {
     console.log(err);
@@ -78,7 +78,7 @@ export const getOrderDetailByOrderId = async (
 
     if (!userId) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: "로그인이 필요합니다.",
+        message: '로그인이 필요합니다.',
       });
     }
 
@@ -87,7 +87,7 @@ export const getOrderDetailByOrderId = async (
     return result.length
       ? res.status(StatusCodes.OK).json(result)
       : res.status(StatusCodes.NOT_FOUND).json({
-          message: "주문 내역이 없습니다.",
+          message: '주문 내역이 없습니다.',
         });
   } catch (err) {
     console.log(err);

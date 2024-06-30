@@ -1,6 +1,7 @@
-import { pool } from "../db/dbConnection";
-import { RowDataPacket } from "mysql2";
-import { IBookResponse, IsearchAllBooksResponse } from "../models/books.model";
+import { pool } from '../db/dbConnection';
+import { RowDataPacket } from 'mysql2';
+import { IBookResponse, IsearchAllBooksResponse } from '../models/books.model';
+import { snakeToCamel } from '../utils/format';
 
 export const findAllBooks = async (
   categoryId?: string,
@@ -21,7 +22,7 @@ export const findAllBooks = async (
     `;
     let findAllBooksQuantityValues: (string | number)[] = [];
 
-    if (categoryId && isNewRelease === "true") {
+    if (categoryId && isNewRelease === 'true') {
       findAllBooksQuantityQuery += ` 
         WHERE category_id = ?
         AND pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()
@@ -32,7 +33,7 @@ export const findAllBooks = async (
         WHERE category_id = ?
       `;
       findAllBooksQuantityValues.push(categoryId);
-    } else if (isNewRelease === "true") {
+    } else if (isNewRelease === 'true') {
       findAllBooksQuantityQuery += ` 
         WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()
       `;
@@ -53,7 +54,7 @@ export const findAllBooks = async (
     const values: string[] = [];
 
     // 카테고리별 신간
-    if (categoryId && isNewRelease === "true") {
+    if (categoryId && isNewRelease === 'true') {
       findAllBooksQuery += ` 
         WHERE category_id = ?
         AND pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()
@@ -70,7 +71,7 @@ export const findAllBooks = async (
     }
 
     // 신간
-    else if (isNewRelease === "true") {
+    else if (isNewRelease === 'true') {
       findAllBooksQuery += ` 
         WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()
       `;
@@ -93,7 +94,9 @@ export const findAllBooks = async (
       values
     );
 
-    return { books: result, totalBooksQunatity };
+    const camelCaseResult = result.map((book) => snakeToCamel(book)) as IBookResponse[];
+
+    return { books: camelCaseResult, totalBooksQunatity };
   } catch (err) {
     throw err;
   } finally {
@@ -104,7 +107,7 @@ export const findAllBooks = async (
 export const findBook = async (
   userId: string,
   bookId: string
-): Promise<RowDataPacket[] | null> => {
+): Promise<RowDataPacket | null> => {
   const conn = await pool.getConnection();
 
   try {
@@ -121,7 +124,9 @@ export const findBook = async (
 
     const [result] = await conn.execute<RowDataPacket[]>(sql, values);
 
-    return result;
+    const camelCaseResult = snakeToCamel(result[0]);
+
+    return camelCaseResult;
   } catch (err) {
     throw err;
   } finally {
@@ -131,7 +136,7 @@ export const findBook = async (
 
 export const findBookExceptLiked = async (
   bookId: string
-): Promise<RowDataPacket[] | null> => {
+): Promise<RowDataPacket | null> => {
   const conn = await pool.getConnection();
 
   try {
@@ -146,8 +151,10 @@ export const findBookExceptLiked = async (
     const values = [bookId];
 
     const [result] = await conn.execute<RowDataPacket[]>(sql, values);
+  
+    const camelCaseResult = snakeToCamel(result[0]);
 
-    return result;
+    return camelCaseResult;
   } catch (err) {
     throw err;
   } finally {

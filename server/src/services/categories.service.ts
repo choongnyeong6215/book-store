@@ -1,5 +1,6 @@
 import { RowDataPacket } from "mysql2";
 import { pool } from "../db/dbConnection";
+import { snakeToCamel } from "../utils/format";
 
 export const findAllCategories = async (): Promise<RowDataPacket[]> => {
   const conn = await pool.getConnection();
@@ -10,9 +11,11 @@ export const findAllCategories = async (): Promise<RowDataPacket[]> => {
         FROM categories
     `;
 
-    const [results] = await conn.execute<RowDataPacket[]>(sql);
+    const [result] = await conn.execute<RowDataPacket[]>(sql);
+    
+    const camelCaseResult = snakeToCamel(result);
 
-    return results;
+    return camelCaseResult;
   } catch (err) {
     throw err;
   } finally {
