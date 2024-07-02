@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
 import { FaRegUser, FaSignInAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const CATEGORY = [
   {
@@ -24,16 +25,20 @@ const CATEGORY = [
 const Header = () => {
   return (
     <HeaderStyle>
-      <h1 className="logo">
-        <img src={logo} alt="book store logo" />
-      </h1>
+      <Link to="/">
+        <h1 className="logo">
+          <img src={logo} alt="book store logo" />
+        </h1>
+      </Link>
       <nav className="category">
         <ul>
           {CATEGORY.map((v) => (
             <li key={v.id}>
-              <a href={v.id === null ? `/books` : `/books?category-id=${v.id}`}>
+              <Link
+                to={v.id === null ? `/books` : `/books?cLinktegory-id=${v.id}`}
+              >
                 {v.name}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -41,16 +46,16 @@ const Header = () => {
       <nav className="auth">
         <ul>
           <li>
-            <a href={`/login`}>
+            <Link to={`/login`}>
               <FaSignInAlt />
               로그인
-            </a>
+            </Link>
           </li>
           <li>
-            <a href={`/join`}>
+            <Link to={`/join`}>
               <FaRegUser />
               회원가입
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
