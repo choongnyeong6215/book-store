@@ -1,28 +1,23 @@
 import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
 import { FaRegUser, FaSignInAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
-const CATEGORY = [
-  {
-    id: null,
-    name: "전체",
-  },
-  {
-    id: 0,
-    name: "동화",
-  },
-  {
-    id: 1,
-    name: "소설",
-  },
-  {
-    id: 2,
-    name: "사회",
-  },
-];
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useCategories } from "../../hooks/useCategories";
+import { useAuthStore } from "../../store/authStore";
+import { useAlert } from "../../hooks/useAlert";
 
 const Header = () => {
+  const { categories } = useCategories();
+  const { isLogin, storeLogOut } = useAuthStore();
+  const naivgate = useNavigate();
+  const showAlert = useAlert();
+
+  const handleLogout = () => {
+    storeLogOut();
+    showAlert("로그아웃 완료되었습니다.");
+    naivgate("/");
+  };
+
   return (
     <HeaderStyle>
       <Link to="/">
@@ -32,32 +27,51 @@ const Header = () => {
       </Link>
       <nav className="category">
         <ul>
-          {CATEGORY.map((v) => (
-            <li key={v.id}>
+          {categories.map((category) => (
+            <li key={category.categoryId}>
               <Link
-                to={v.id === null ? `/books` : `/books?cLinktegory-id=${v.id}`}
+                to={
+                  category.categoryId === null
+                    ? `/books`
+                    : `/books?cLinktegory-id=${category.categoryId}`
+                }
               >
-                {v.name}
+                {category.categoryName}
               </Link>
             </li>
           ))}
         </ul>
       </nav>
       <nav className="auth">
-        <ul>
-          <li>
-            <Link to={`/login`}>
-              <FaSignInAlt />
-              로그인
-            </Link>
-          </li>
-          <li>
-            <Link to={`/join`}>
-              <FaRegUser />
-              회원가입
-            </Link>
-          </li>
-        </ul>
+        {isLogin && (
+          <ul>
+            <li>
+              <Link to={"/cart"}>장바구니</Link>
+            </li>
+            <li>
+              <Link to={"/orders"}>주문내역</Link>
+            </li>
+            <li>
+              <button onClick={handleLogout}>로그아웃</button>
+            </li>
+          </ul>
+        )}
+        {!isLogin && (
+          <ul>
+            <li>
+              <Link to={`/login`}>
+                <FaSignInAlt />
+                로그인
+              </Link>
+            </li>
+            <li>
+              <Link to={`/join`}>
+                <FaRegUser />
+                회원가입
+              </Link>
+            </li>
+          </ul>
+        )}
       </nav>
     </HeaderStyle>
   );
@@ -105,13 +119,17 @@ const HeaderStyle = styled.header`
       display: flex;
       gap: 16px;
       li {
-        a {
+        a,
+        button {
           font-size: 1rem;
           font-weight: 600;
           text-decoration: none;
           display: flex;
           align-items: center;
           line-height: 1;
+          background-color: none;
+          border: none;
+          cursor: pointer;
 
           svg {
             margin-right: 5px;
