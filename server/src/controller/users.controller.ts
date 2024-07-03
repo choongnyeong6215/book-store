@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 import {
   insertUser,
   findUser,
   findUserByEmail,
   updateUserPassword,
-} from '../services/users.service.js';
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import { IUserRequestBody } from '../models/users.model';
+} from "../services/users.service.js";
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import { IUserRequestBody } from "../models/users.model";
 
 export const createUser = async (
   req: Request<{}, {}, IUserRequestBody>,
@@ -38,8 +38,8 @@ export const issueLoginUserToken = async (
     const loginUser = result[0];
 
     const hashPassword = crypto
-      .pbkdf2Sync(password, loginUser.salt, 10000, 10, 'sha512')
-      .toString('base64');
+      .pbkdf2Sync(password, loginUser.salt, 10000, 10, "sha512")
+      .toString("base64");
 
     if (loginUser && loginUser.password === hashPassword) {
       const token = jwt.sign(
@@ -49,16 +49,17 @@ export const issueLoginUserToken = async (
         },
         process.env.ACCESS_TOKEN_KEY as string,
         {
-          expiresIn: '1m',
-          issuer: 'leeee',
+          expiresIn: "1h",
+          issuer: "leeee",
         }
       );
 
-      res.cookie('token', token, { httpOnly: true });
+      res.cookie("token", token, { httpOnly: true });
 
       return res.status(StatusCodes.OK).json({
         id: loginUser.id,
         email: loginUser.email,
+        token,
       });
     } else {
       return res.status(StatusCodes.UNAUTHORIZED).end();
@@ -70,7 +71,7 @@ export const issueLoginUserToken = async (
 };
 
 export const RequestResetpassword = async (
-  req: Request<{}, {}, Omit<IUserRequestBody, 'password'>>,
+  req: Request<{}, {}, Omit<IUserRequestBody, "password">>,
   res: Response
 ): Promise<Response<any, Record<string, any>>> => {
   const { email } = req.body;
