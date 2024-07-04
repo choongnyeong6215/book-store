@@ -42,6 +42,12 @@ export const useBook = (bookId: string | undefined) => {
   const addCart = (quantity: number) => {
     if (!book) return;
 
+    // 로그인 체크
+    if (!isLogin) {
+      showAlert("로그인이 필요합니다.");
+      return;
+    }
+
     addCartItems({
       bookId: book.id,
       quantity,
