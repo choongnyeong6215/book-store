@@ -13,7 +13,7 @@ interface IAddToCartProps {
 
 const AddToCart = ({ book }: IAddToCartProps) => {
   const [quantity, setQuantity] = useState<number>(1);
-  const showAlert = useAlert();
+  const { showAlert } = useAlert();
   const { addCart, cartAdded } = useBook(book.id.toString());
 
   const handleChangeQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {

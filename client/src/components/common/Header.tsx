@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
 import { FaRegUser, FaSignInAlt } from "react-icons/fa";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCategories } from "../../hooks/useCategories";
 import { useAuthStore } from "../../store/authStore";
 import { useAlert } from "../../hooks/useAlert";
@@ -10,7 +10,7 @@ const Header = () => {
   const { categories } = useCategories();
   const { isLogin, storeLogOut } = useAuthStore();
   const naivgate = useNavigate();
-  const showAlert = useAlert();
+  const { showAlert } = useAlert();
 
   const handleLogout = () => {
     storeLogOut();
@@ -33,7 +33,7 @@ const Header = () => {
                 to={
                   category.categoryId === null
                     ? `/books`
-                    : `/books?cLinktegory-id=${category.categoryId}`
+                    : `/books?category-id=${category.categoryId}`
                 }
               >
                 {category.categoryName}
@@ -43,10 +43,11 @@ const Header = () => {
         </ul>
       </nav>
       <nav className="auth">
+        {/* 높이 간격 맞추기 */}
         {isLogin && (
           <ul>
             <li>
-              <Link to={"/cart"}>장바구니</Link>
+              <Link to={"/carts"}>장바구니</Link>
             </li>
             <li>
               <Link to={"/orders"}>주문내역</Link>
@@ -56,6 +57,7 @@ const Header = () => {
             </li>
           </ul>
         )}
+        {/* 높이 간격 맞추기 */}
         {!isLogin && (
           <ul>
             <li>

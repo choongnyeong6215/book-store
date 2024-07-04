@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const [isRequestResetPassword, setIsRequestResetPassword] = useState(false);
-  const showAlert = useAlert();
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
 
   const {
@@ -21,13 +21,13 @@ const ResetPassword = () => {
   const handleRequestRestPassword = (data: IJoinInfo) => {
     if (isRequestResetPassword) {
       // 초기화
-      resetPassword(data).then((response) => {
+      resetPassword(data).then(() => {
         showAlert("비밀번호가 초기화 되었습니다.");
         navigate("/login");
       });
     } else {
       // 초기화 요청
-      resetRequest(data).then((response) => setIsRequestResetPassword(true));
+      resetRequest(data).then(() => setIsRequestResetPassword(true));
     }
   };
 

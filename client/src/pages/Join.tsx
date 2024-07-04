@@ -13,7 +13,7 @@ export interface IJoinInfo {
 
 const Join = () => {
   const navigate = useNavigate();
-  const showAlert = useAlert();
+  const { showAlert } = useAlert();
 
   const {
     register,
@@ -22,7 +22,7 @@ const Join = () => {
   } = useForm<IJoinInfo>();
 
   const handleJoin = (data: IJoinInfo) => {
-    signUp(data).then((response) => {
+    signUp(data).then(() => {
       // 성공
       showAlert(`${data.email.split("@")[0]}님 안녕하세요!`);
 

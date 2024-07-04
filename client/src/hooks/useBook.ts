@@ -8,7 +8,7 @@ import { addCartItems } from "../api/cartItems.api";
 export const useBook = (bookId: string | undefined) => {
   const [book, setBook] = useState<IBookDetail | null>(null);
   const { isLogin } = useAuthStore();
-  const showAlert = useAlert();
+  const { showAlert } = useAlert();
   const [cartAdded, setCartAdded] = useState(false);
 
   const likeToggle = () => {
@@ -63,7 +63,7 @@ export const useBook = (bookId: string | undefined) => {
   useEffect(() => {
     if (!bookId) return;
 
-    const bookDetail = fetchBook(bookId).then((book) => {
+    fetchBook(bookId).then((book) => {
       setBook(book);
     });
   }, [bookId]);
