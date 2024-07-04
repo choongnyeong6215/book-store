@@ -16,6 +16,20 @@ const createClient = (config?: AxiosRequestConfig) => {
     ...config,
   });
 
+  // Authorization
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = getToken();
+      if (token) {
+        config.headers.Authorization = token;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
   // 응답 & 에러 처리
   axiosInstance.interceptors.response.use(
     (response) => {
