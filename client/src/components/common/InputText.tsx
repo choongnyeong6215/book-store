@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 interface IInputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   inputType?: "text" | "email" | "password" | "number";
-  placeholder: string;
+  placeholder?: string;
 }
 
 const InputText = forwardRef(
