@@ -4,7 +4,7 @@ export interface IBook {
   title: string;
   img: number;
   categoryId: number;
-  form: number;
+  form: string;
   isbn: number;
   summary: string;
   detail: string;

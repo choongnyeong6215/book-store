@@ -16,6 +16,8 @@ const Button = ({
   schema,
   disabled,
   isLoading,
+  onClick,
+  ...props
 }: IButtonProps) => {
   return (
     <ButtonStyle
@@ -23,6 +25,8 @@ const Button = ({
       schema={schema}
       disabled={disabled}
       isLoading={isLoading}
+      onClick={onClick}
+      {...props}
     >
       {children}
     </ButtonStyle>
@@ -39,7 +43,11 @@ const ButtonStyle = styled.button<Omit<IButtonProps, "children">>`
   border-radius: ${({ theme }) => theme.borderRadius.default};
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
-  cursor: ${({ disabled }) => (disabled ? "none" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 0.3s, color 0.3s, opacity 0.3s;
 `;
 
 export default Button;
