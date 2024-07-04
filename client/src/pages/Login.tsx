@@ -12,7 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
   const showAlert = useAlert();
 
-  const { isLogin, storeLogin, storeLogOut } = useAuthStore();
+  const { storeLogin } = useAuthStore();
 
   const {
     register,
@@ -20,7 +20,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<IJoinInfo>();
 
-  const hamdleLogin = (data: IJoinInfo) => {
+  const handleLogin = (data: IJoinInfo) => {
     login(data).then(
       (response) => {
         // 로그인 정보 저장
@@ -37,7 +37,7 @@ const Login = () => {
 
   return (
     <JoinStyle>
-      <form onSubmit={handleSubmit(hamdleLogin)}>
+      <form onSubmit={handleSubmit(handleLogin)}>
         <fieldset>
           <InputText
             inputType="email"
