@@ -20,7 +20,7 @@ export const getAllBooks = async (
     // isNewRelease true일 경우 신간으로 간주
     if (isNewRelease && isNewRelease !== "true") {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        message: "신간 여부 쿼리스트링은 오직 'true'만 사용합니다."
+        message: "신간 여부 쿼리스트링은 오직 'true'만 사용합니다.",
       });
     }
 
@@ -31,7 +31,7 @@ export const getAllBooks = async (
       });
     }
 
-    const { books, totalBooksQunatity } = await findAllBooks(
+    const { books, totalBooksQuantity } = await findAllBooks(
       listNum,
       currentPage,
       categoryId,
@@ -48,15 +48,15 @@ export const getAllBooks = async (
       books,
       pagination: {
         currentPage: currentPage ? Number(currentPage) : 1,
-        totalBooksQunatity: Number(totalBooksQunatity),
+        totalBooksQuantity: Number(totalBooksQuantity),
       },
     };
 
     return result
       ? res.status(StatusCodes.OK).json(result)
       : res.status(StatusCodes.NOT_FOUND).json({
-        message: "도서를 찾을 수 없습니다.",
-      });
+          message: "도서를 찾을 수 없습니다.",
+        });
   } catch (err) {
     console.log(err);
     return res.status(StatusCodes.BAD_REQUEST).end();

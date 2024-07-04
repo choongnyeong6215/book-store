@@ -26,7 +26,7 @@ export interface IBookResponse {
 
 export interface IPagination {
   currentPage: number;
-  totalBooksQunatity: number;
+  totalBooksQuantity: number;
 }
 
 export interface IBookResponseWithPagination {
