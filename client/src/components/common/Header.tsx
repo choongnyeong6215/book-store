@@ -33,7 +33,7 @@ const Header = () => {
                 to={
                   category.categoryId === null
                     ? `/books`
-                    : `/books?category-id=${category.categoryId}`
+                    : `/books?categoryId=${category.categoryId}`
                 }
               >
                 {category.categoryName}
@@ -50,7 +50,7 @@ const Header = () => {
               <Link to={"/carts"}>장바구니</Link>
             </li>
             <li>
-              <Link to={"/orders"}>주문내역</Link>
+              <Link to={"/orderList"}>주문내역</Link>
             </li>
             <li>
               <button onClick={handleLogout}>로그아웃</button>
