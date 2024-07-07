@@ -1,10 +1,10 @@
-import InputText from "../components/common/InputText";
-import Button from "../components/common/Button";
-import { IJoinInfo, JoinStyle } from "./Join";
+import InputText from "@/components/common/InputText";
+import Button from "@/components/common/Button";
+import { IJoinInfo, JoinStyle } from "@/pages/Join";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { resetPassword, resetRequest } from "../api/auth.api";
-import { useAlert } from "../hooks/useAlert";
+import { resetPassword, resetRequest } from "@/api/auth.api";
+import { useAlert } from "@/hooks/useAlert";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {

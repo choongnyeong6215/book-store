@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Button from "../common/Button";
+import Button from "@/components/common/Button";
 
 interface IFindAddressButtonProps {
   onCompleted: (address: string) => void;

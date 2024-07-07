@@ -1,12 +1,12 @@
 import { IJoinInfo, JoinStyle } from "./Join";
-import InputText from "../components/common/InputText";
+import InputText from "@/components/common/InputText";
 import { useNavigate } from "react-router-dom";
-import { useAlert } from "../hooks/useAlert";
+import { useAlert } from "@/hooks/useAlert";
 import { useForm } from "react-hook-form";
-import Button from "../components/common/Button";
+import Button from "@/components/common/Button";
 import { Link } from "react-router-dom";
-import { login } from "../api/auth.api";
-import { useAuthStore } from "../store/authStore";
+import { login } from "@/api/auth.api";
+import { useAuthStore } from "@/store/authStore";
 
 const Login = () => {
   const navigate = useNavigate();

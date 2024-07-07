@@ -1,6 +1,6 @@
-import { IBook, IBookDetail } from "../models/books.model";
-import { IPagination } from "../models/pagination.model";
-import { httpClient } from "./https";
+import { IBook, IBookDetail } from "@/models/books.model";
+import { IPagination } from "@/models/pagination.model";
+import { httpClient } from "@/api//https";
 
 interface IFetchBookParmas {
   categoryId?: number;

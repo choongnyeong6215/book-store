@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useBook } from "../hooks/useBook";
-import { generateImg } from "../utils/image";
-import Title from "../components/common/Title";
-import { IBookDetail } from "../models/books.model";
-import { formatDate, formatNumber } from "../utils/format";
+import { useBook } from "@/hooks/useBook";
+import { generateImg } from "@/utils/image";
+import Title from "@/components/common/Title";
+import { IBookDetail } from "@/models/books.model";
+import { formatDate, formatNumber } from "@/utils/format";
 import { Link } from "react-router-dom";
-import ElipsisBox from "../components/common/ElipsisBox";
-import LikeButton from "../components/book/LikeButton";
-import AddToCart from "../components/book/AddToCart";
+import ElipsisBox from "@/components/common/ElipsisBox";
+import LikeButton from "@/components/book/LikeButton";
+import AddToCart from "@/components/book/AddToCart";
 
 const bookInfoList = [
   {

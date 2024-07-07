@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import Title from "../components/common/Title";
-import CartItem from "../components/cart/CartItem";
-import { useCartItems } from "../hooks/useCartItems";
+import Title from "@/components/common/Title";
+import CartItem from "@/components/cart/CartItem";
+import { useCartItems } from "@/hooks/useCartItems";
 import { useMemo, useState } from "react";
-import NotExist from "../components/common/NotExist";
+import NotExist from "@/components/common/NotExist";
 import { FaShoppingCart } from "react-icons/fa";
-import CartSummary from "../components/cart/CartSummary";
-import Button from "../components/common/Button";
-import { useAlert } from "../hooks/useAlert";
-import { IOrderSheet } from "../models/orders.model";
+import CartSummary from "@/components/cart/CartSummary";
+import Button from "@/components/common/Button";
+import { useAlert } from "@/hooks/useAlert";
+import { IOrderSheet } from "@/models/orders.model";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {

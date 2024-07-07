@@ -1,6 +1,6 @@
 import { FaSmileWink } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import NotExist from "../common/NotExist";
+import NotExist from "@/components/common/NotExist";
 
 const BookNotExist = () => {
   return (

@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import logo from "../../assets/images/logo.png";
+import logo from "@/assets/images/logo.png";
 import { FaRegUser, FaSignInAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useCategories } from "../../hooks/useCategories";
-import { useAuthStore } from "../../store/authStore";
-import { useAlert } from "../../hooks/useAlert";
+import { useCategories } from "@/hooks/useCategories";
+import { useAuthStore } from "@/store/authStore";
+import { useAlert } from "@/hooks/useAlert";
 
 const Header = () => {
   const { categories } = useCategories();

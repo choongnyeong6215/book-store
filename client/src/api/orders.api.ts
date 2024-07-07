@@ -1,6 +1,5 @@
 import { IOrder, IOrderDetail, IOrderSheet } from "../models/orders.model";
-import { httpClient } from "./https";
-import { resetPassword } from "./auth.api";
+import { httpClient } from "@/api/https";
 
 export const addOrder = async (orderData: IOrderSheet) => {
   const response = await httpClient.post("/orders", orderData);

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Title from "../components/common/Title";
-import { useOrders } from "../hooks/useOrders";
-import { formatDate, formatNumber } from "../utils/format";
-import Button from "../components/common/Button";
+import Title from "@/components/common/Title";
+import { useOrders } from "@/hooks/useOrders";
+import { formatDate, formatNumber } from "@/utils/format";
+import Button from "@/components/common/Button";
 import React from "react";
 
 const OrderList = () => {

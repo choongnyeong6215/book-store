@@ -1,5 +1,5 @@
-import { IJoinInfo } from "../pages/Join";
-import { httpClient } from "./https";
+import { IJoinInfo } from "@/pages/Join";
+import { httpClient } from "@/api//https";
 
 export const signUp = async (userData: IJoinInfo) => {
   const response = await httpClient.post("/users/join", userData);

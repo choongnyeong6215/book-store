@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { ICartItems } from "../../models/cartItems.model";
-import Button from "../common/Button";
-import Title from "../common/Title";
-import { formatNumber } from "../../utils/format";
+import { ICartItems } from "@/models/cartItems.model";
+import Button from "@/components/common/Button";
+import Title from "@/components/common/Title";
+import { formatNumber } from "@/utils/format";
 import CheckIconButton from "./CheckIconButton";
 import { useMemo } from "react";
-import { useAlert } from "../../hooks/useAlert";
+import { useAlert } from "@/hooks/useAlert";
 
 interface ICartItemProps {
   cartItem: ICartItems;

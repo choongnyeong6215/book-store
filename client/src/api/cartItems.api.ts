@@ -1,5 +1,5 @@
-import { ICartItems } from "../models/cartItems.model";
-import { httpClient } from "./https";
+import { ICartItems } from "@/models/cartItems.model";
+import { httpClient } from "@/api/https";
 
 interface IAddCartItemsParams {
   bookId: number;

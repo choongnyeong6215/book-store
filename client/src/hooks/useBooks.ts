@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IBook } from "../models/books.model";
-import { IPagination } from "../models/pagination.model";
-import { fetchBooks } from "../api/books.api";
-import { QUERYSTRING } from "../constants/queryString";
-import { LIMIT } from "../constants/pagination";
+import { IBook } from "@/models/books.model";
+import { IPagination } from "@/models/pagination.model";
+import { fetchBooks } from "@/api/books.api";
+import { QUERYSTRING } from "@/constants/queryString";
+import { LIMIT } from "@/constants/pagination";
 
 export const useBooks = () => {
   const location = useLocation();

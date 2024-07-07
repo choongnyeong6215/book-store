@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import InputText from "../components/common/InputText";
-import Button from "../components/common/Button";
+import InputText from "@/components/common/InputText";
+import Button from "@/components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { signUp } from "../api/auth.api";
-import { useAlert } from "../hooks/useAlert";
+import { signUp } from "@/api/auth.api";
+import { useAlert } from "@/hooks/useAlert";
 
 export interface IJoinInfo {
   email: string;

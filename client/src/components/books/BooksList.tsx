@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import BookItem from "./BookItem";
-import { IBook } from "../../models/books.model";
+import { IBook } from "@/models/books.model";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { QUERYSTRING } from "../../constants/queryString";
-import { TViewMode } from "./BooksViewSwitcher";
+import { QUERYSTRING } from "@/constants/queryString";
+import { TViewMode } from "@/components/books/BooksViewSwitcher";
 
 interface IBooksListProps {
   books: IBook[];

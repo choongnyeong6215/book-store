@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "@/components/common/Button";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 interface IElipsisBox {

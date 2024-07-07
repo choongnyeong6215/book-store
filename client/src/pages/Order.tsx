@@ -1,14 +1,14 @@
 import { Location, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Title from "../components/common/Title";
-import CartSummary from "../components/cart/CartSummary";
-import Button from "../components/common/Button";
-import InputText from "../components/common/InputText";
+import Title from "@/components/common/Title";
+import CartSummary from "@/components/cart/CartSummary";
+import Button from "@/components/common/Button";
+import InputText from "@/components/common/InputText";
 import { useForm } from "react-hook-form";
-import { IDelivery, IOrderSheet } from "../models/orders.model";
-import FindAddressButton from "../components/order/FindAddressButton";
-import { addOrder } from "../api/orders.api";
-import { useAlert } from "../hooks/useAlert";
+import { IDelivery, IOrderSheet } from "@/models/orders.model";
+import FindAddressButton from "@/components/order/FindAddressButton";
+import { addOrder } from "@/api/orders.api";
+import { useAlert } from "@/hooks/useAlert";
 
 interface IDeliveryForm extends IDelivery {
   addressDetail: string;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchCategory } from "../api/categories.api";
-import { ICategory } from "../models/categories.model";
+import { fetchCategory } from "@/api/categories.api";
+import { ICategory } from "@/models/categories.model";
 import { useLocation } from "react-router-dom";
 
 export const useCategories = () => {

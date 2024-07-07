@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { IBookDetail } from "../../models/books.model";
-import InputText from "../common/InputText";
-import Button from "../common/Button";
+import { IBookDetail } from "@/models/books.model";
+import InputText from "@/components/common/InputText";
+import Button from "@/components/common/Button";
 import React, { useState } from "react";
-import { useAlert } from "../../hooks/useAlert";
+import { useAlert } from "@/hooks/useAlert";
 import { Link } from "react-router-dom";
-import { useBook } from "../../hooks/useBook";
+import { useBook } from "@/hooks/useBook";
 
 interface IAddToCartProps {
   book: IBookDetail;
