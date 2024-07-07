@@ -3,8 +3,8 @@ import InputText from "@/components/common/InputText";
 import Button from "@/components/common/Button";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { signUp } from "@/api/auth.api";
 import { useAlert } from "@/hooks/useAlert";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface IJoinInfo {
   email: string;
@@ -14,6 +14,7 @@ export interface IJoinInfo {
 const Join = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
+  const { userSignup } = useAuth();
 
   const {
     register,
@@ -22,12 +23,7 @@ const Join = () => {
   } = useForm<IJoinInfo>();
 
   const handleJoin = (data: IJoinInfo) => {
-    signUp(data).then(() => {
-      // 성공
-      showAlert(`${data.email.split("@")[0]}님 안녕하세요!`);
-
-      navigate("/login");
-    });
+    userSignup(data);
   };
 
   return (

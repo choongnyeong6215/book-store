@@ -2,16 +2,14 @@ import InputText from "@/components/common/InputText";
 import Button from "@/components/common/Button";
 import { IJoinInfo, JoinStyle } from "@/pages/Join";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { resetPassword, resetRequest } from "@/api/auth.api";
-import { useAlert } from "@/hooks/useAlert";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const ResetPassword = () => {
-  const [isRequestResetPassword, setIsRequestResetPassword] = useState(false);
-  const { showAlert } = useAlert();
-  const navigate = useNavigate();
-
+  const {
+    isRequestResetPassword,
+    userResetPassword,
+    userResetRequestPassword,
+  } = useAuth();
   const {
     register,
     handleSubmit,
@@ -19,16 +17,9 @@ const ResetPassword = () => {
   } = useForm<IJoinInfo>();
 
   const handleRequestRestPassword = (data: IJoinInfo) => {
-    if (isRequestResetPassword) {
-      // 초기화
-      resetPassword(data).then(() => {
-        showAlert("비밀번호가 초기화 되었습니다.");
-        navigate("/login");
-      });
-    } else {
-      // 초기화 요청
-      resetRequest(data).then(() => setIsRequestResetPassword(true));
-    }
+    isRequestResetPassword
+      ? userResetPassword(data)
+      : userResetRequestPassword(data);
   };
 
   return (
