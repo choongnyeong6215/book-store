@@ -1,6 +1,10 @@
 ## ERD
 
-![alt text](book_store_diagram.png)
+![alt text](diagram.png)
+
+<br>
+
+## [API 명세서](https://living-flower-b1f.notion.site/API-13aad7d6746d4e26b1eaa7b737620746)
 
 <br>
 
@@ -8,17 +12,23 @@
 
 - [x] 타입스크립트 전환
 - [x] route - service - controller 구조
+- [x] API Response 포맷 정돈 (status code, naming convention, camel case)
+- [x] 유효성 체크 (express-validator)
 
 <br>
 
 ## 추가 구현 사항
 
-- [ ] API Response 포맷 정돈 (status code, naming convention, camel case)
+<h1 style="color:pink">먼저 구현하기</h1>
+- [ ] Authorizaiton -> Bearer Toekn 변경
 - [ ] bcrypt로 보안 강화
-- [ ] 유효성 체크 (express-validator)
-- [ ] 에러 미들웨어로 별도 처리
 - [ ] access token, referesh token 발급
-- [ ] swagger 연동
+
+<br>
+
+---
+
+- [ ] 에러 미들웨어로 별도 처리
 - [ ] ORM 적용 (sequelize OR TypeORM)
 - [ ] 도서 랜덤 데이터 추가
 
