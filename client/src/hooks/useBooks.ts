@@ -1,39 +1,34 @@
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { IBook } from "@/models/books.model";
-import { IPagination } from "@/models/pagination.model";
-import { fetchBooks } from "@/api/books.api";
-import { QUERYSTRING } from "@/constants/queryString";
-import { LIMIT } from "@/constants/pagination";
+import { useLocation } from 'react-router-dom';
+import { fetchBooks } from '@/api/books.api';
+import { QUERYSTRING } from '@/constants/queryString';
+import { LIMIT } from '@/constants/pagination';
+import { useQuery } from '@tanstack/react-query';
 
 export const useBooks = () => {
   const location = useLocation();
 
-  const [books, setBooks] = useState<IBook[]>([]);
-  const [pagination, setPagination] = useState<IPagination>({
-    currentPage: 1,
-    totalBooksQuantity: 0,
+  const { data, isLoading: isBooksLoading } = useQuery({
+    queryKey: ['books', location.search],
+    queryFn: () => {
+      const params = new URLSearchParams(location.search);
+
+      return fetchBooks({
+        categoryId: params.get(QUERYSTRING.CATEGORYID)
+          ? Number(params.get(QUERYSTRING.CATEGORYID))
+          : undefined,
+        isNewRelease: params.get(QUERYSTRING.ISNEWRELASE) ? true : undefined,
+        currentPage: params.get(QUERYSTRING.CURRENTPAGE)
+          ? Number(params.get(QUERYSTRING.CURRENTPAGE))
+          : 1,
+        listNum: LIMIT,
+      });
+    },
   });
-  const [isEmpty, setIsEmpty] = useState(true);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-
-    fetchBooks({
-      categoryId: params.get(QUERYSTRING.CATEGORYID)
-        ? Number(params.get(QUERYSTRING.CATEGORYID))
-        : undefined,
-      isNewRelease: params.get(QUERYSTRING.ISNEWRELASE) ? true : undefined,
-      currentPage: params.get(QUERYSTRING.CURRENTPAGE)
-        ? Number(params.get(QUERYSTRING.CURRENTPAGE))
-        : 1,
-      listNum: LIMIT,
-    }).then((response) => {
-      setBooks(response.books);
-      setPagination(response.pagination);
-      setIsEmpty(response.books.length === 0);
-    });
-  }, [location.search]);
-
-  return { books, pagination, isEmpty };
+  return {
+    books: data?.books,
+    pagination: data?.pagination,
+    isEmpty: data?.books.length === 0,
+    isBooksLoading,
+  };
 };
